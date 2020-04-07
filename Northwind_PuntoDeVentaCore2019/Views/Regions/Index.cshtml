@@ -1,0 +1,209 @@
+﻿@model IEnumerable<Northwind_PuntoDeVentaCore2019.Models.Region>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+@*<h1>Index</h1>
+
+    <p>
+        <a asp-action="Create">Create New</a>
+    </p>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.RegionDescription)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+    @foreach (var item in Model) {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.RegionDescription)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.RegionId">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.RegionId">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.RegionId">Delete</a>
+                </td>
+            </tr>
+    }
+        </tbody>
+    </table>*@
+
+
+
+<div class="box box-body box-primary">
+    <h1>
+        List of Regions
+    </h1>
+
+    <p>
+        <a asp-action="Create" class="btn btn-primary">
+            <span aria-hidden="true" class="fa fa-plus"></span> Create New
+        </a>
+    </p>
+
+    <table class="table ">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.RegionId)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.RegionDescription)
+                </th>
+                <th></th>
+                <th></th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.RegionId)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.RegionDescription)
+                    </td>
+                    <td>
+                        <button type="button" onclick="Editar(@item.RegionId)" class="btn btn-warning" data-toggle="modal" data-target="#exampleModalEdit">
+                            <span aria-hidden="true" class="fa  fa-pencil-alt fa-fw"></span>
+                        </button>|
+                        @*<a asp-action="Edit" asp-route-id="@item.RegionId" class="btn btn-warning">
+                                <span aria-hidden="true" class="fa  fa-pencil-alt fa-fw"></span>
+                            </a> |*@
+                    </td>
+                    @*<a asp-action="Details" asp-route-id="@item.RegionId" class="btn btn-info">
+                         <span aria-hidden="true" class="fa  fa-1x fa-list"></span>
+                        </a> |*@
+                    <td class="td_detalles">
+                        <button type="button" onclick="Detalles(@item.RegionId)" class="btn btn-info" data-toggle="modal" data-target="#exampleModaldatails">
+                            <span aria-hidden="true" class="fa  fa-1x fa-list"></span>
+                        </button>|
+                    </td>
+                    <td>
+                        <a asp-action="Delete" asp-route-id="@item.RegionId" class="btn btn-danger">
+                            <span aria-hidden="true" class="fa fa-times"></span>
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+
+<!-- view modal the edit-->
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" data-whatever="mdo">Open modal for mdo</button>
+@*<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" data-whatever="fat">Open modal for fat</button>
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" data-whatever="getbootstrap">Open modal for getbootstrap</button>*@
+
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Create New Region</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="Create" method="post" enctype="multipart/form-data">
+                    <div class="form-group">
+                        <label for="RegionDescription" class="col-form-label">Regions:</label>
+                        <input type="text" class="form-control" id="RegionId" name="RegionId" hidden>
+                        <input type="text" class="form-control" id="RegionDescriptionCreate" name="RegionDescription">
+                        <span for="RegionDescriptionCreate" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="Status" class="col-form-label">Status:</label>
+                        <select class="form-control" id="Status" name="Status">
+                            <option value="">-Selecionar -</option>
+                        </select>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary " data-dismiss="modal">
+                    Close
+                    <span aria-hidden="true" class="fa fa-times"></span>
+
+                </button>
+                <button type="submit" onclick="" class="btn btn-primary" id="btn_Create">
+                    Save
+                    <span aria-hidden="true" class="fa fa-save -alt fa-fw"></span>
+                </button>
+                @*<button type="button" class="btn btn-primary">Create</button>*@
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- view modal the datails-->
+<!-- Button trigger modal -->
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModaldatails">
+    Launch demo modal
+</button>
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModaldatails" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Details</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <label>Region Description</label>
+                <input id="Regiondatails" class="form-control" disabled />
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- view modal the Edit-->
+<!-- Button trigger modal -->
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalEdit">
+    Launch demo modal
+</button>
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModalEdit" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Edit Region </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <label>Id Region</label>
+                <input id="IdRegionEdit" class="form-control" disabled />
+                <label>Region Description</label>
+                <input id="RegionEdit" class="form-control" disabled />
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/js/Regions/General.js"></script>
+}

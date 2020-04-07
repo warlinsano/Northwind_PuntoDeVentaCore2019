@@ -1,0 +1,70 @@
+﻿@model Northwind_PuntoDeVentaCore2019.Models.Orders
+
+@{
+    ViewData["Title"] = "Comprobante #" + Model.OrderId;
+}
+
+<h2 class="page-header">Comprobante #@Model.OrderId.ToString().PadLeft(4)</h2>
+
+<div class="row">
+    <div class="col-xs-12">
+
+        <ul id="facturador-detalle" class="list-group">
+            <li class="list-group-item">
+                <h3>@Model.Customer.ContactName</h3>
+            </li>
+            <li class="list-group-item">
+                <div class="row">
+                    <div class="col-xs-6">
+                        <b>Producto</b>
+                    </div>
+                    <div class="col-xs-2 text-center">
+                        <b>Cantidad</b>
+                    </div>
+                    <div class="col-xs-2 text-right">
+                        <b>Precio Unitario</b>
+                    </div>
+                    <div class="col-xs-2 text-right">
+                        <b>Monto</b>
+                    </div>
+                </div>
+            </li>
+            @foreach (var d in Model.OrderDetails)
+            {
+                <li class="list-group-item">
+                    <div class="row">
+                        <div class="col-xs-6">
+                            @d.Product.ProductName
+                        </div>
+                        <div class="col-xs-2 text-center">
+                            @d.Quantity
+                        </div>
+                        <div class="col-xs-2 text-right">
+                            @string.Format("{0:c}", d.Product.UnitPrice)
+                        </div>
+                        <div class="col-xs-2 text-right">
+                            @string.Format("{0:c}", d.Monto)
+                        </div>
+                    </div>
+                </li>
+            }
+            @if (Model.OrderDetails.Count > 0)
+            {
+                <li class="list-group-item text-right" style="font-size:18px;">
+                    @string.Format("{0:c}", Model.Total)
+                </li>
+            }
+        </ul>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Edit" class="btn btn-warning" asp-route-id="@Model.OrderId">
+        Edit
+        <span aria-hidden="true" class="fa fa-pencil-alt fa-fw"></span>
+    </a> |
+    <a asp-action="Index" class="btn btn-primary ">
+        Back to List
+        <span aria-hidden="true" class="fa fa-share"></span>
+    </a>
+</div>

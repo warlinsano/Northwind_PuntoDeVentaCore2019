@@ -1,0 +1,89 @@
+﻿@model IEnumerable<Northwind_PuntoDeVentaCore2019.Models.Orders>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+
+@section header {
+    <!-- Custom styles for this page -->
+    <link href="~/vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
+    <style>
+        .jumbotron {
+            padding: 1rem 1rem;
+            padding-top: 1rem;
+            padding-right: 1rem;
+            padding-bottom: 1rem;
+            padding-left: 1rem;        
+        }
+    </style>
+}
+
+<div class="jumbotron">
+    <!-- Page Heading -->
+    <h1 class="h3 mb-2 text-gray-800">Orders</h1>
+    <p class="mb-4">Show a list of  all Orders.</p>
+</div>
+
+<p>
+    <a asp-action="registrar" class="btn btn-primary ">
+        <span aria-hidden="true" class="fa fa-plus"></span> Create New Orders
+    </a>
+</p>
+
+<!-- DataTales -->
+<div class="card shadow mb-4">
+    <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">List of Orders</h6>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-bordered table-striped" id="dataTable">
+                <thead>
+                    <tr>
+                        <th>Cliente</th>
+                        <th style="width:140px">Total</th>
+                        <th style="width:140px">Creado</th>
+                    </tr>
+                </thead>
+                <tfoot>
+                    <tr>
+                        <th>Cliente</th>
+                        <th style="width:140px">Total</th>
+                        <th style="width:140px">Creado</th>
+                    </tr>
+                </tfoot>
+                <tbody>
+                    @foreach (var m in Model)
+                    {
+                        <tr>
+                            <td>
+                                <a asp-action="Details" asp-route-id="@m.OrderId" class="btn btn-danger">
+                                    <span >@m.Customer.ContactName</span>
+                                </a>
+                                @*@Html.ActionLink(m.Customer.ContactName, "Details", new { id = m.OrderId })*@
+                            </td>
+                            <td class="text-right">@string.Format("{0:c}", m.Total)</td>
+                            <td class="text-right">@m.OrderDate.ToString() </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <!-- Page level plugins -->
+    <script src="~/vendor/datatables/jquery.dataTables.min.js"></script>
+    <script src="~/vendor/datatables/dataTables.bootstrap4.min.js"></script>
+
+    <!-- Page level custom scripts -->
+    <script src="~/js/demo/datatables-demo.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            $('.table').DataTable();
+        });
+    </script>
+}

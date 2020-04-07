@@ -1,0 +1,154 @@
+﻿@*@{
+        ViewData["Title"] = "Privacy Policy";
+    }*@
+@*<h1>@ViewData["Title"]</h1>
+
+    <p>Use this page to detail your site's privacy policy.</p>*@
+<!--
+    NOMBRE:   WARLIN ANT. SANO BAEZ
+    CORREO:   warlinsano@gmail.com
+    TEL.:     829-329-0694
+    CURSO:    Diseno y Desarrollo de Aplicasiones
+
+    https://www.youtube.com/watch?v=GAQB7Y4X5fM&list=PLPl81lqbj-4J-gfAERGDCdOQtVgRhSvIT
+  -->
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <title>vuejs</title>
+
+    <meta name=author content="warlin">
+    <meta name=keywords content="nombre">
+    <meta name=description content="Servidor Web">
+
+    <!-- comentarios -->
+    <link rel="stylesheet" type="text/css" href="">
+    <!-- import CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+</head>
+<body>
+    <div id="app">
+        <h1>{{titulo}}</h1>
+
+
+
+
+        <table>
+            <thead>
+                <tr>
+                    <th>
+                        Id
+                    </th>
+                    <th>
+                        Mascotas
+                    </th>
+                <tr>
+            </thead>
+            <tbody>
+                <tr v-for="(Datos, index) of tableData ">
+                    <th>
+                        {{index}}
+                    </th>
+                    <th>
+                        {{Datos.companyName }}
+                    </th>
+                </tr>
+            </tbody>
+        </table>
+
+        <ul>
+            <li v-for="item of arrayFruta ">{{item}}</li>
+        </ul>
+
+        <ul>
+            <li v-for="(Mascotas, index) of objMascotas ">
+                {{Mascotas.nombre }} - {{Mascotas.estado }}
+                <span v-if="Mascotas.estado">
+                    - Estado falso
+                </span>
+                {{index}}
+                <button v-on:click="Agregar(index);">Agregar</button>
+            </li>
+        </ul>
+
+        <componete1></componete1>
+
+    </div>
+</body>
+<!-- versión de desarrollo, incluye advertencias de ayuda en la consola -->
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+<script>
+
+    //const axios = require('axios');
+
+    Vue.component('componete1', {
+        template: `
+               <div>Hola</div>
+               `
+    })
+
+    const app = new Vue({
+        el: '#app',
+        data: {
+            titulo: 'hola mundo vue',
+            arrayFruta: ['manzana', 'pera', 'platano'],
+            objMascotas: [
+                { nombre: 'dominicana', estado: 'true' },
+                { nombre: 'haiti', estado: 'false' },
+                { nombre: 'benezuela', estado: 'true' }
+            ],
+            tableData: []
+        },
+        created: function () {
+            this.SuplidorGetAll();
+        },
+        methods: {
+            Agregar: function (index) {
+                console.log(index);
+            },
+            Editar: function (index) {
+                console.log(index);
+            },
+            Eliminar: function (index) {
+                console.log(index);
+            },
+            SuplidorGetAll: function () {
+                // Make a request for a user with a given ID
+                axios.get('https://localhost:44326/api/SuppliersAPI')
+                    .then(function (response) {
+                        // handle success
+                        console.log(response.data);
+                        //this.tableData = response.data[1].companyName;
+                        //console.log(app.tableData);
+                        //app.tableData = response.data[1].companyName;
+                        app.tableData = response.data;
+
+                    })
+                    .catch(function (error) {
+                        // handle error
+                        console.log(error);
+                    })
+                    .finally(function () {
+                        // always executed
+                    });
+            }
+        },
+        computed: {
+
+        }
+
+    })
+
+</script>
+
+<!-- import JavaScript -->
+<script src="https://unpkg.com/element-ui/lib/index.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
+
+</html>

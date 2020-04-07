@@ -1,0 +1,204 @@
+﻿@model Northwind_PuntoDeVentaCore2019.ViewModels.ComprobanteViewModel
+
+@{
+    ViewData["Title"] = "Registrar";
+}
+
+@section header {
+    <link href="~/lib/jquery-ui/jquery-ui.min.css" rel="stylesheet" />
+    <style>
+        .jumbotron {
+            padding: 1rem 2rem;
+           }
+    </style>
+}
+
+<h2 class="page-header">Nuevo comprobante</h2>
+
+<div class="card shadow ">
+    <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">List of Products</h6>
+    </div>
+    <div class="card-body">
+        @using (Html.BeginForm("Registrar", "Orders", FormMethod.Post, new { id = "frm-comprobante" }))
+        {
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-row">
+                    <div class="form-group col-md-12">
+                        <input type="hidden" asp-for="ClienteId" />
+                        <label asp-for="Cliente" class="control-label"></label>
+                        <input asp-for="Cliente" class="form-control" placeholder="Ingrese el nombre del cliente" />
+                        <span asp-validation-for="Cliente" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="form-row jumbotron">
+                    <div class="form-group col-md-6">
+                        <input type="hidden" asp-for="CabeceraProductoId" />
+                        <input asp-for="CabeceraProductoNombre" class="form-control" placeholder="Buscar producto" />
+                        <span asp-validation-for="CabeceraProductoNombre" class="text-danger"></span>
+                        @*@Html.ValidationMessage("producto_agregar", null, new { @class = "label label-danger" })*@
+                    </div>
+                    <div class="form-group col-md-2">
+                        <input asp-for="CabeceraProductoCantidad" class="form-control" placeholder="Cantidad" />
+                    </div>
+                    <div class="form-group col-md-3">
+                        <input asp-for="CabeceraProductoPrecio" class="form-control" placeholder="Precio" aria-label="Amount (to the nearest dollar)" />
+                    </div>
+                    <div class="form-group col-md-1">
+                        <button class="btn btn-primary" type="submit" value="agregar_producto" name="action">
+                            <i class="fa fa-plus"></i>
+                        </button>
+                    </div>
+                </div>
+                <hr />
+                @if (Model.ComprobanteDetalle.Count > 0)
+                {
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-striped" id="dataTable" width="100%" cellspacing="0">
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <th>
+                                        <b>Producto</b>
+                                    </th>
+                                    <th>
+                                        <b>Cantidad</b>
+                                    </th>
+                                    <th>
+                                        <b>Precio Unitario</b>
+                                    </th>
+                                    <th>
+                                        <b>Monto</b>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var d in Model.ComprobanteDetalle)
+                                {
+                                    var i = Model.ComprobanteDetalle.IndexOf(d);
+                                    <!-- Modelo -->
+                                    @Html.Hidden("ComprobanteDetalle[" + i + "].ProductoId", d.ProductoId)
+                                    @Html.Hidden("ComprobanteDetalle[" + i + "].ProductoNombre", d.ProductoNombre)
+                                    @Html.Hidden("ComprobanteDetalle[" + i + "].PrecioUnitario", d.PrecioUnitario)
+                                    @Html.Hidden("ComprobanteDetalle[" + i + "].Cantidad", d.Cantidad)
+                                    @Html.Hidden("ComprobanteDetalle[" + i + "].Retirar", d.Retirar, new { @class = "retirar" })
+                                    <tr>
+                                        <td>
+                                            <button class="btn btn-danger btn-xs btn-block btn-retirar" type="submit" value="retirar_producto" name="action">
+                                                <i class="fa fa-times"></i>
+                                            </button>
+                                        </td>
+                                        <td>
+                                            @d.ProductoNombre
+                                        </td>
+                                        <td>
+                                            @d.Cantidad
+                                        </td>
+                                        <td>
+                                            @string.Format("{0:c}", d.PrecioUnitario)
+                                        </td>
+                                        <td>
+                                            @string.Format("{0:c}", d.Monto())
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                    <b  style="font-size:18px;">@string.Format("{0:c}", Model.Total())</b>
+                    <button class="btn btn-primary btn-block btn-lg" type="submit" value="generar" name="action">Generar comprobante</button>
+                }
+          }
+    </div>
+</div>
+    
+
+
+
+
+@section Scripts {
+    <script src="~/lib/jquery-2.1.3.js"></script>
+    <script src="~/lib/jquery-ui/jquery-ui.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            LimpiarAgregarProducto();
+
+            $(".btn-retirar").click(function () {
+                if (confirm('¿Está seguro de retirar el item seleccionado?')) {
+                    $(this).closest('.list-group-item').find('.retirar').val("True");
+                    return true;
+                }
+
+                return false;
+            })
+
+          /* Autocomplete de producto, jquery UI */
+            $("#CabeceraProductoNombre").autocomplete({
+                //dataType: 'JSON',
+                source: function (request, response) {
+                    $.ajax({
+                        url: '/Orders/BuscarProducto',
+                        type: "post",
+                        dataType: "json",
+                        data: { nombre: request.term },
+                        success: function (data) {
+                            //console.log(data);
+                            //response(data);
+                            response($.map(data, function (item) {
+                                return {
+                                    id: item.id,
+                                    value: item.value,
+                                    precio: item.precio
+                                }
+                            }))
+                        }
+                    });
+                },
+                select: function (e, ui) {
+                    //console.log("id: "+ ui.item.id);
+                    //console.log("nombre: "+ ui.item.value);
+                    //console.log("presio: "+ ui.item.precio);
+
+                    $("#CabeceraProductoId").val(ui.item.id);
+                    $("#CabeceraProductoPrecio").val(ui.item.precio);
+                    $("#CabeceraProductoCantidad").focus();
+                }
+            })
+
+          /* Autocomplete de cliente, jquery UI */
+           $("#Cliente").autocomplete({
+                source: function (request, response) {
+                    $.ajax({
+                        url: '/Orders/BuscarCliente',
+                        type: "post",
+                        dataType: "json",
+                        data: { nombre: request.term },
+                        success: function (data) {
+                            //console.log(data);
+                            //response(data);
+                            response($.map(data, function (item) {
+                                return {
+                                    id: item.id,
+                                    value: item.value  
+                                }
+                            }))
+                        }
+                    });
+                },
+                select: function (e, ui) {
+                    $("#ClienteId").val(ui.item.id);
+                    //$("#CabeceraProductoPrecio").val(ui.item.precio);
+                    //$("#CabeceraProductoCantidad").focus();
+                }
+            })
+
+        })
+
+        function LimpiarAgregarProducto() {
+            $("#CabeceraProductoId").val("");
+            $("#Producto").val("");
+            $("#CabeceraProductoPrecio").val("");
+            $("#CabeceraProductoCantidad").val(1);
+        }
+    </script>
+}
