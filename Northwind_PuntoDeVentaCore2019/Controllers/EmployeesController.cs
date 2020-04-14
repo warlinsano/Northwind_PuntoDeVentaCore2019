@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Northwind_PuntoDeVentaCore2019.Data;
+using Northwind_PuntoDeVentaCore2019.Helpers;
 using Northwind_PuntoDeVentaCore2019.Models;
 
 namespace Northwind_PuntoDeVentaCore2019.Controllers
@@ -19,10 +20,15 @@ namespace Northwind_PuntoDeVentaCore2019.Controllers
     public class EmployeesController : Controller
     {
         private readonly NorthwindContext _context;
+        //private  IImageHelper _iImageHelper;
 
-        public EmployeesController(NorthwindContext context)
+        public EmployeesController(
+            NorthwindContext context
+            //IImageHelper IImageHelper
+            )
         {
             _context = context;
+            //_iImageHelper = IImageHelper;
         }
 
         // GET: Employees
@@ -77,20 +83,11 @@ namespace Northwind_PuntoDeVentaCore2019.Controllers
         {
             if (ModelState.IsValid)
             {
-                if (Image != null)
+                if (Image != null && Image.Length > 0)
                 {
-                    if (Image.Length > 0)
-                    //Convert Image to byte and save to database
-                    {
-                        byte[] p1 = null;
-                        using (var fs1 = Image.OpenReadStream())
-                        using (var ms1 = new MemoryStream())
-                        {
-                            fs1.CopyTo(ms1);
-                            p1 = ms1.ToArray();
-                        }
-                        employees.Photo = p1;
-                    }
+                    var _iImageHelper = new  ImageHelper();
+                   employees.Photo = _iImageHelper.UploadImageDB(Image);
+                   employees.PhotoPath = await _iImageHelper.UploadImageDirectoryAsync(Image, "employees");
                 }
                 _context.Add(employees);
                 await _context.SaveChangesAsync();
@@ -134,25 +131,31 @@ namespace Northwind_PuntoDeVentaCore2019.Controllers
             {
                 try
                 {
-                    if (Image != null)
-                    {
-                        if (Image.Length > 0)
-                        //Convert Image to byte and save to database
-                        {
-                            byte[] p1 = null;
-                            using (var fs1 = Image.OpenReadStream())
-                            using (var ms1 = new MemoryStream())
-                            {
-                                fs1.CopyTo(ms1);
-                                p1 = ms1.ToArray();
-                            }
-                            employees.Photo = p1;
-                        }
-                    }
-                    //else
+                    //if (Image != null)
                     //{
-                    //    employees.Photo = _context.Employees.Where(p => p.EmployeeId == id).Select(x => x.Photo).FirstOrDefault();
+                    //    if (Image.Length > 0)
+                    //    //Convert Image to byte and save to database
+                    //    {
+                    //        byte[] p1 = null;
+                    //        using (var fs1 = Image.OpenReadStream())
+                    //        using (var ms1 = new MemoryStream())
+                    //        {
+                    //            fs1.CopyTo(ms1);
+                    //            p1 = ms1.ToArray();
+                    //        }
+                    //        employees.Photo = p1;
+                    //    }
                     //}
+                    ////else
+                    ////{
+                    ////    employees.Photo = _context.Employees.Where(p => p.EmployeeId == id).Select(x => x.Photo).FirstOrDefault();
+                    ////}
+                    if (Image != null && Image.Length > 0)
+                    {
+                        var _iImageHelper = new ImageHelper();
+                        employees.Photo = _iImageHelper.UploadImageDB(Image);
+                        employees.PhotoPath = await _iImageHelper.UploadImageDirectoryAsync(Image, "employees");
+                    }
                     _context.Update(employees);
                     await _context.SaveChangesAsync();
                 }

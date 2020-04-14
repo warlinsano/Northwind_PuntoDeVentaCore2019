@@ -104,15 +104,19 @@
                                 @Html.DisplayFor(modelItem => item.HomePhone)
                             </td>
                             <td>
+
                                 @*@Html.DisplayFor(modelItem => item.Photo)*@
-                                @if (String.IsNullOrEmpty(item.PhotoBase64))
+                                @if (!String.IsNullOrEmpty(item.PhotoPath))
                                 {
-                                    <img class="img-profile rounded-circle" src="~/img/no-profile.png" height="50" width="50" />
+                                    <img class="img-profile rounded-circle" src="@Url.Content(item.PhotoPath)" height="50" width="50" />
+                                }
+                                else if (!String.IsNullOrEmpty(item.PhotoBase64))
+                                {
+                                    <img class="img-profile rounded-circle" src="@item.PhotoBase64" height="50" width="50" />
                                 }
                                 else
                                 {
-                                    <img class="img-profile rounded-circle" src="@item.PhotoBase64" height="50" width="50" />
-
+                                    <img class="img-profile rounded-circle" src="~/img/no-profile.png" height="50" width="50" />
                                 }
                             </td>
                             <td>

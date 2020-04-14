@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace Northwind_PuntoDeVentaCore2019.Models
 {
@@ -87,6 +88,14 @@ namespace Northwind_PuntoDeVentaCore2019.Models
         public int? ReportsTo { get; set; }
         public string PhotoPath { get; set; }
 
+        public string ImageFullPath => string.IsNullOrEmpty(PhotoPath)
+           ? null : $"http://warlinsano.somee.com{PhotoPath.Substring(1)}";
+
+        //[Display(Name = "Birth Date")]
+        //[DisplayFormat(DataFormatString = "{0:yyyy/MM/dd}")]
+        //public DateTime BirthDateLocal => BirthDate.ToLocalTime();
+
+
         //[DataType(DataType.Currency)]
         //[Required(ErrorMessage = "You must enter {0}")]
         //[DisplayFormat(DataFormatString = "{0:2}", ApplyFormatInEditMode = false)]
@@ -97,10 +106,13 @@ namespace Northwind_PuntoDeVentaCore2019.Models
 
         //url 
         //bonus
-
+        [JsonIgnore]
         public virtual Employees ReportsToNavigation { get; set; }
+        [JsonIgnore]
         public virtual ICollection<EmployeeTerritories> EmployeeTerritories { get; set; }
+        [JsonIgnore]
         public virtual ICollection<Employees> InverseReportsToNavigation { get; set; }
+        [JsonIgnore]
         public virtual ICollection<Orders> Orders { get; set; }
     }
 }

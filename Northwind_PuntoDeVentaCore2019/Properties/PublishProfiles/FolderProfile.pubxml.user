@@ -6,6 +6,11 @@ edite el archivo MSBuild. Visite https://go.microsoft.com/fwlink/?LinkID=208121 
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <TimeStampOfAssociatedLegacyPublishXmlFile />
-    <_PublishTargetUrl>C:\Users\Fanny-pc\Desktop\publicar</_PublishTargetUrl>
+    <_PublishTargetUrl>C:\Users\Fanny-pc\Desktop\Publicar</_PublishTargetUrl>
   </PropertyGroup>
+  <ItemGroup>
+    <DestinationConnectionStrings Include="ConexionStringSomee">
+      <Value>Server=DBNorthwind.mssql.somee.com%3bDatabase=DBNorthwind%3bUser Id=warlinsano_SQLLogin_1%3bPassword=io8llcwqgz%3b</Value>
+    </DestinationConnectionStrings>
+  </ItemGroup>
 </Project>

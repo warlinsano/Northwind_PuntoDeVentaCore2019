@@ -1,14 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Security.Claims;
+using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Tokens;
 using Northwind_PuntoDeVentaCore2019.Data;
 using Northwind_PuntoDeVentaCore2019.Helpers;
 using Northwind_PuntoDeVentaCore2019.Models;
+using Northwind_PuntoDeVentaCore2019.ViewModels;
 
 namespace Northwind_PuntoDeVentaCore2019.Controllers
 {
@@ -16,15 +22,21 @@ namespace Northwind_PuntoDeVentaCore2019.Controllers
     public class AspNetUsersController : Controller
     {
         private readonly UserManager<IdentityUser> _userManager;
-
+        private readonly SignInManager<IdentityUser> _SignInManager;
         //private readonly IUserHelper _userHelper;
         private readonly NorthwindContext _context;
+        private readonly IConfiguration _configuration;
+
         public AspNetUsersController(
             NorthwindContext context,
-             UserManager<IdentityUser> userManager
+             UserManager<IdentityUser> userManager,
+             SignInManager<IdentityUser> signInManager,
+                 IConfiguration configuration
           )
         {
             _userManager = userManager;
+            _SignInManager = signInManager;
+            _configuration = configuration;
             _context = context;
         }
 
@@ -231,6 +243,62 @@ namespace Northwind_PuntoDeVentaCore2019.Controllers
         public async Task<IActionResult> UserActivityLog()
         {
             return View(await _context.AspNetUsers.ToListAsync());
+        }
+
+
+        public async Task<IdentityUser> GetUserByEmailAsync(string email)
+        {
+            return await _userManager.FindByEmailAsync(email);
+        }
+
+        public async Task<Microsoft.AspNetCore.Identity.SignInResult> ValidatePasswordAsync(IdentityUser user, string password)
+        {
+            return await _SignInManager.CheckPasswordSignInAsync(
+                user,
+                password,
+                false);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> CreateToken([FromBody] LoginViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var user = await GetUserByEmailAsync(model.Username);
+                if (user != null)
+                {
+                    var result = await ValidatePasswordAsync(
+                        user,
+                        model.Password);
+
+                    if (result.Succeeded)
+                    {
+                        var claims = new[]
+                        {
+                            new Claim(JwtRegisteredClaimNames.Sub, user.Email),
+                            new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
+                        };
+
+                        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Tokens:Key"]));
+                        var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+                        var token = new JwtSecurityToken(
+                            _configuration["Tokens:Issuer"],
+                            _configuration["Tokens:Audience"],
+                            claims,
+                            expires: DateTime.UtcNow.AddMonths(4),
+                            signingCredentials: credentials);
+                        var results = new
+                        {
+                            token = new JwtSecurityTokenHandler().WriteToken(token),
+                            expiration = token.ValidTo
+                        };
+
+                        return Created(string.Empty, results);
+                    }
+                }
+            }
+
+            return BadRequest();
         }
 
 

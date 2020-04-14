@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\REPOSITORIO\\Northwind_PuntoDeVentaCore2019\\Northwind_PuntoDeVentaCore2019\\Northwind_PuntoDeVentaCore2019.csproj": {}
+    "C:\\Users\\Fanny-pc\\Documents\\REPOSITORIO\\Northwind_PuntoDeVentaCore2019\\Northwind_PuntoDeVentaCore2019\\Northwind_PuntoDeVentaCore2019.csproj": {}
   },
   "projects": {
-    "D:\\REPOSITORIO\\Northwind_PuntoDeVentaCore2019\\Northwind_PuntoDeVentaCore2019\\Northwind_PuntoDeVentaCore2019.csproj": {
+    "C:\\Users\\Fanny-pc\\Documents\\REPOSITORIO\\Northwind_PuntoDeVentaCore2019\\Northwind_PuntoDeVentaCore2019\\Northwind_PuntoDeVentaCore2019.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\REPOSITORIO\\Northwind_PuntoDeVentaCore2019\\Northwind_PuntoDeVentaCore2019\\Northwind_PuntoDeVentaCore2019.csproj",
+        "projectUniqueName": "C:\\Users\\Fanny-pc\\Documents\\REPOSITORIO\\Northwind_PuntoDeVentaCore2019\\Northwind_PuntoDeVentaCore2019\\Northwind_PuntoDeVentaCore2019.csproj",
         "projectName": "Northwind_PuntoDeVentaCore2019",
-        "projectPath": "D:\\REPOSITORIO\\Northwind_PuntoDeVentaCore2019\\Northwind_PuntoDeVentaCore2019\\Northwind_PuntoDeVentaCore2019.csproj",
+        "projectPath": "C:\\Users\\Fanny-pc\\Documents\\REPOSITORIO\\Northwind_PuntoDeVentaCore2019\\Northwind_PuntoDeVentaCore2019\\Northwind_PuntoDeVentaCore2019.csproj",
         "packagesPath": "C:\\Users\\Fanny-pc\\.nuget\\packages\\",
-        "outputPath": "D:\\REPOSITORIO\\Northwind_PuntoDeVentaCore2019\\Northwind_PuntoDeVentaCore2019\\obj\\",
+        "outputPath": "C:\\Users\\Fanny-pc\\Documents\\REPOSITORIO\\Northwind_PuntoDeVentaCore2019\\Northwind_PuntoDeVentaCore2019\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Microsoft\\Xamarin\\NuGet\\",
@@ -43,6 +43,10 @@
       "frameworks": {
         "netcoreapp3.1": {
           "dependencies": {
+            "Microsoft.AspNetCore.Authentication.JwtBearer": {
+              "target": "Package",
+              "version": "[3.1.3, )"
+            },
             "Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore": {
               "target": "Package",
               "version": "[3.1.0, )"
@@ -73,7 +77,11 @@
             },
             "Microsoft.VisualStudio.Web.CodeGeneration.Design": {
               "target": "Package",
-              "version": "[3.1.0, )"
+              "version": "[3.1.1, )"
+            },
+            "System.IdentityModel.Tokens.Jwt": {
+              "target": "Package",
+              "version": "[6.5.0, )"
             }
           },
           "imports": [

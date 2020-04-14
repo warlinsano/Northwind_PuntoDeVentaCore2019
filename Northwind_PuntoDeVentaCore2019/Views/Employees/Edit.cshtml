@@ -139,13 +139,18 @@
     <div class="form-group">
         <div class="col-md-10 " id="preview">
             @Html.HiddenFor(model => model.Photo)
-            @if (String.IsNullOrEmpty(Model.PhotoBase64))
+
+            @if (!String.IsNullOrEmpty(Model.PhotoPath))
             {
-                <img id="img" class="img-profile rounded-circle" src="~/img/no-profile.png" />
+                <img id="img" class="img-profile rounded-circle" src="@Url.Content(Model.PhotoPath)" height="50" width="50" />
+            }
+            else if (!String.IsNullOrEmpty(Model.PhotoBase64))
+            {
+                <img id="img" class="img-profile rounded-circle" src="@Model.PhotoBase64" height="50" width="50" />
             }
             else
             {
-                <img id="img" class="img-profile rounded-circle" src="@Model.PhotoBase64" />
+                <img id="img" class="img-profile rounded-circle" src="~/img/no-profile.png" height="50" width="50" />
             }
         </div>
     </div>
