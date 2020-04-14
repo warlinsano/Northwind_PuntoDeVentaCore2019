@@ -289,7 +289,7 @@
         <div class="form-group col-md-5">
             <label asp-for="HireDate" class="control-label"></label>
             <div class="input-group">
-                <input asp-for="HireDate" class="form-control" />
+                <input asp-for="HireDate"   class="form-control"  />
             </div>
             <span asp-validation-for="HireDate" class="text-danger"></span>
         </div>
@@ -325,6 +325,7 @@
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
     <script src="~/js/Img_preview.js"></script>
+
 }
 
 

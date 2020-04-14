@@ -28,11 +28,12 @@ namespace Northwind_PuntoDeVentaCore2019.Models
         [StringLength(10, ErrorMessage = "The field {0} must be betwen {1} and {2} characters", MinimumLength = 3)]
         public string FirstName { get; set; }
 
+        [JsonIgnore]
         [NotMapped]
         [Display(Name = "Name")]
         public string FullName
         {
-            get {return string.Format("{0}{1}", FirstName, LastName); }
+            get {return string.Format("{0} {1}", FirstName, LastName); }
         }
 
         [StringLength(30, ErrorMessage = "The field {0} must be betwen {1} and {2} characters", MinimumLength = 2)]
@@ -43,12 +44,12 @@ namespace Northwind_PuntoDeVentaCore2019.Models
 
         [Display(Name = "Birth Date")]
         [DataType(DataType.Date)]
-        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = false)]
         public DateTime? BirthDate { get; set; }
 
         [Display(Name = "Hire Date")]
         [DataType(DataType.Date)]
-        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = false)]
         public DateTime? HireDate { get; set; }
 
         [StringLength(60, ErrorMessage = "The field {0} must be betwen {1} and {2} characters", MinimumLength = 5)]
@@ -73,8 +74,11 @@ namespace Northwind_PuntoDeVentaCore2019.Models
 
         [StringLength(4)]
         public string Extension { get; set; }
+
+        [JsonIgnore]
         public byte[] Photo { get; set; }
 
+        [JsonIgnore]
         [NotMapped]
         public string PhotoBase64
         {
@@ -86,6 +90,8 @@ namespace Northwind_PuntoDeVentaCore2019.Models
 
         public string Notes { get; set; }
         public int? ReportsTo { get; set; }
+
+        [JsonIgnore]
         public string PhotoPath { get; set; }
 
         public string ImageFullPath => string.IsNullOrEmpty(PhotoPath)
