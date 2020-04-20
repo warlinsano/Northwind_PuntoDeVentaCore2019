@@ -47,7 +47,6 @@ namespace Northwind_PuntoDeVentaCore2019.Controllers
         }
 
 
-
         // GET: Employees/Details/5
         public async Task<IActionResult> Details(int? id)
         {
@@ -131,21 +130,7 @@ namespace Northwind_PuntoDeVentaCore2019.Controllers
             {
                 try
                 {
-                    //if (Image != null)
-                    //{
-                    //    if (Image.Length > 0)
-                    //    //Convert Image to byte and save to database
-                    //    {
-                    //        byte[] p1 = null;
-                    //        using (var fs1 = Image.OpenReadStream())
-                    //        using (var ms1 = new MemoryStream())
-                    //        {
-                    //            fs1.CopyTo(ms1);
-                    //            p1 = ms1.ToArray();
-                    //        }
-                    //        employees.Photo = p1;
-                    //    }
-                    //}
+     
                     ////else
                     ////{
                     ////    employees.Photo = _context.Employees.Where(p => p.EmployeeId == id).Select(x => x.Photo).FirstOrDefault();
